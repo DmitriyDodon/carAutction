@@ -1,0 +1,199 @@
+basePath: /
+definitions:
+  httpmodels.CarCreateRequest:
+    properties:
+      color:
+        example: '#ffb7d5'
+        maxLength: 255
+        type: string
+      max_speed_kmp:
+        example: 224
+        minimum: 0
+        type: integer
+      max_speed_mph:
+        example: 140
+        minimum: 0
+        type: integer
+      model_name:
+        example: Mx-5
+        maxLength: 255
+        minLength: 2
+        type: string
+      price_in_cents:
+        example: 1000000
+        minimum: 0
+        type: integer
+      vendor_name:
+        example: Mazda
+        maxLength: 255
+        minLength: 2
+        type: string
+    required:
+    - color
+    - max_speed_kmp
+    - model_name
+    - price_in_cents
+    - vendor_name
+    type: object
+  httpmodels.CarResponse:
+    properties:
+      color:
+        example: '#ffb7d5'
+        maxLength: 255
+        type: string
+      date_created_at:
+        type: string
+      id:
+        type: string
+      max_speed_kmp:
+        example: 224
+        minimum: 0
+        type: integer
+      max_speed_mph:
+        example: 140
+        minimum: 0
+        type: integer
+      model_name:
+        example: Mx-5
+        maxLength: 255
+        minLength: 2
+        type: string
+      price_in_cents:
+        example: 1000000
+        minimum: 0
+        type: integer
+      vendor_name:
+        example: Mazda
+        maxLength: 255
+        minLength: 2
+        type: string
+    required:
+    - color
+    - max_speed_kmp
+    - model_name
+    - price_in_cents
+    - vendor_name
+    type: object
+  httpmodels.CustomHttpError:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Car auction app
+  termsOfService: http://swagger.io/terms/
+  title: AuthServiceAPI
+  version: "1.0"
+paths:
+  /car:
+    get:
+      description: Get car list from auction
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/httpmodels.CarResponse'
+            type: array
+        "500":
+          description: '[ITERNAL_SERVER_ERROR]'
+          schema:
+            $ref: '#/definitions/httpmodels.CustomHttpError'
+      summary: Get car list
+    post:
+      consumes:
+      - application/json
+      description: Create car for auction
+      parameters:
+      - description: request body
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/httpmodels.CarCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: '[INCORRECT_REQUEST_BODY], [VALIDATION_FAILED]'
+          schema:
+            $ref: '#/definitions/httpmodels.CustomHttpError'
+        "500":
+          description: '[ITERNAL_SERVER_ERROR]'
+          schema:
+            $ref: '#/definitions/httpmodels.CustomHttpError'
+      summary: Create car
+  /car/{carId}:
+    delete:
+      description: Delete car from auction
+      parameters:
+      - description: Id of the car
+        in: path
+        name: carId
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "500":
+          description: '[ITERNAL_SERVER_ERROR]'
+          schema:
+            $ref: '#/definitions/httpmodels.CustomHttpError'
+      summary: Delete car
+    get:
+      description: Get car from auction
+      parameters:
+      - description: Id of the car
+        in: path
+        name: carId
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httpmodels.CarResponse'
+        "404":
+          description: '[NOT_FOUND]'
+          schema:
+            $ref: '#/definitions/httpmodels.CustomHttpError'
+        "500":
+          description: '[ITERNAL_SERVER_ERROR]'
+          schema:
+            $ref: '#/definitions/httpmodels.CustomHttpError'
+      summary: Get car
+    put:
+      consumes:
+      - application/json
+      description: Update car for auction
+      parameters:
+      - description: Id of the car
+        in: path
+        name: carId
+        type: string
+      - description: request body
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/httpmodels.CarCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: '[INCORRECT_REQUEST_BODY], [VALIDATION_FAILED]'
+          schema:
+            $ref: '#/definitions/httpmodels.CustomHttpError'
+        "500":
+          description: '[ITERNAL_SERVER_ERROR]'
+          schema:
+            $ref: '#/definitions/httpmodels.CustomHttpError'
+      summary: Update car
+swagger: "2.0"
